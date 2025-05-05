@@ -1,13 +1,15 @@
+import 'package:aurelius/features/auth/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthScreen extends StatefulWidget {
+class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,9 @@ class _AuthScreenState extends State<AuthScreen> {
         SizedBox(
           width: 300,
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              ref.read(authControllerProvider.notifier).googleSign(context);
+            },
             label: const Text(
               'Continue with Google',
               style: TextStyle(fontSize: 18, color: Colors.white),
