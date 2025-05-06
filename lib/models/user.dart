@@ -1,9 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:hive/hive.dart';
 
+part 'user.g.dart';
+
+@HiveType(typeId: 1)
 class UserModel {
+  @HiveField(0)
   final String username;
+  @HiveField(1)
   final String uid;
+  @HiveField(2)
   final String email;
   UserModel({
     required this.username,

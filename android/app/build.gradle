@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.aurelius"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -31,6 +31,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+         minSdkVersion 23
     }
 
     buildTypes {

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:aurelius/models/user.dart';
+import 'package:hive/hive.dart';
 
 final authRepositoryProvider = Provider((ref) => AuthRepository(
     ref.read(authProvider),
@@ -26,6 +27,7 @@ class AuthRepository {
 
   EitherUser<UserModel> googleSignIn() async {
     try {
+      final userBox = Hive.box('user');
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication? userAuth =
           await googleUser!.authentication;
@@ -49,7 +51,9 @@ class AuthRepository {
       } else {
         user = await getUserData(userCredential.user!.uid);
       }
-      return right(user);
+      userBox.put('user', user);
+
+      return right(userBox.get('user'));
     } on FirebaseAuthException catch (error) {
       throw error.message!;
     } catch (error) {
@@ -65,5 +69,9 @@ class AuthRepository {
         .map((data) => UserModel.fromMap(data.data() as Map<String, dynamic>))
         .first;
     return user;
+  }
+
+  UserModel loadCachedUser() {
+    return Hive.box('user').get('user');
   }
 }

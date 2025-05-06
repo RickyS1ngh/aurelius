@@ -1,7 +1,6 @@
 import 'package:aurelius/core/utils.dart';
 import 'package:aurelius/features/auth/repository/auth_repository.dart';
 import 'package:aurelius/models/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +23,13 @@ class AuthController extends StateNotifier<UserModel> {
 
   Future<void> googleSign(BuildContext context) async {
     final user = await _authRepository.googleSignIn();
-    user.fold((l) => showSnackbar(context, l.errorMessage),
-        (user) => _ref.read(currentUserProvider.notifier).state = user);
+    user.fold((l) => showSnackbar(context, l.errorMessage), (user) {
+      _ref.read(currentUserProvider.notifier).state = user;
+    });
+  }
+
+  void loadCachedUser() {
+    final cachedUser = _authRepository.loadCachedUser();
+    _ref.read(currentUserProvider.notifier).state = cachedUser;
   }
 }
