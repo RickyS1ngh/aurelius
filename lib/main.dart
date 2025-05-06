@@ -1,7 +1,7 @@
 import 'package:aurelius/core/providers/firebase_providers.dart';
 import 'package:aurelius/features/auth/controller/auth_controller.dart';
 import 'package:aurelius/features/auth/screens/auth_screen.dart';
-import 'package:aurelius/features/todo/screens/to_do_screen.dart';
+import 'package:aurelius/features/splash/screens/splash_screen.dart';
 import 'package:aurelius/models/user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,16 +31,22 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
-        home: StreamBuilder(
-            stream: ref.watch(authProvider).authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ToDoScreen();
-              } else {
-                return AuthScreen();
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
+      home: StreamBuilder(
+          stream: ref.watch(authProvider).authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (ref.read(currentUserProvider) == null) {
+                Future.microtask(() {
+                  ref.read(authControllerProvider.notifier).loadCachedUser();
+                });
               }
-            }));
+              return const SplashScreen();
+            } else {
+              return const AuthScreen();
+            }
+          }),
+    );
   }
 }
