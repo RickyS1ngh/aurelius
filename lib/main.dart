@@ -1,13 +1,17 @@
+import 'package:aurelius/adapters/category_adapter.dart';
+import 'package:aurelius/adapters/task_adapter.dart';
+import 'package:aurelius/adapters/time_of_day_adapter.dart';
+import 'package:aurelius/adapters/user_adapter.dart';
+import 'package:aurelius/core/constants/constants.dart';
 import 'package:aurelius/core/providers/firebase_providers.dart';
 import 'package:aurelius/features/auth/controller/auth_controller.dart';
 import 'package:aurelius/features/auth/screens/auth_screen.dart';
 import 'package:aurelius/features/splash/screens/splash_screen.dart';
-import 'package:aurelius/models/user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +19,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await Hive.initFlutter();
+
+  Hive.registerAdapter(TaskModelAdapter());
   Hive.registerAdapter(UserModelAdapter());
-  await Hive.openBox('user');
+  Hive.registerAdapter(CategoryAdapter());
+
+  await Hive.openBox(Constants.userBox);
 
   runApp(
     const ProviderScope(
@@ -38,14 +46,15 @@ class MyApp extends ConsumerWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (ref.read(currentUserProvider) == null) {
-                Future.microtask(() {
-                  ref.read(authControllerProvider.notifier).loadCachedUser();
-                });
+                if (ref.read(authControllerProvider.notifier).isCachedUser()) {
+                  Future.microtask(() {
+                    ref.read(authControllerProvider.notifier).loadCachedUser();
+                  });
+                }
               }
               return const SplashScreen();
-            } else {
-              return const AuthScreen();
             }
+            return const AuthScreen();
           }),
     );
   }

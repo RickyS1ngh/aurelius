@@ -15,21 +15,46 @@ class AuthController extends StateNotifier<UserModel> {
       : _authRepository = authRepository,
         _ref = ref,
         super(
-          UserModel(username: '', uid: '', email: ''),
+          UserModel(username: '', email: '', tasks: []),
         );
 
   final AuthRepository _authRepository;
   final Ref _ref;
 
-  Future<void> googleSign(BuildContext context) async {
+  Future<bool> googleSign(BuildContext context) async {
     final user = await _authRepository.googleSignIn();
-    user.fold((l) => showSnackbar(context, l.errorMessage), (user) {
+    return user.fold((l) {
+      showSnackbar(context, l.errorMessage);
+      return false;
+    }, (user) {
       _ref.read(currentUserProvider.notifier).state = user;
+
+      return true;
     });
   }
 
+  Future<bool> appleSignin(BuildContext context) async {
+    final user = await _authRepository.appleSignIn();
+    return user.fold((l) {
+      showSnackbar(context, l.errorMessage);
+      return false;
+    }, (user) {
+      _ref.read(currentUserProvider.notifier).state = user;
+
+      return true;
+    });
+  }
+
+  bool isCachedUser() {
+    return _authRepository.isCachedUser();
+  }
+
   void loadCachedUser() {
-    final cachedUser = _authRepository.loadCachedUser();
-    _ref.read(currentUserProvider.notifier).state = cachedUser;
+    try {
+      final cachedUser = _authRepository.loadCachedUser();
+      _ref.read(currentUserProvider.notifier).state = cachedUser;
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 }
