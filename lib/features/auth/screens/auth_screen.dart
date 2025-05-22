@@ -1,3 +1,4 @@
+import 'package:aurelius/core/utils.dart';
 import 'package:aurelius/features/auth/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,8 +40,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         SizedBox(
           width: 300,
           child: ElevatedButton.icon(
-            onPressed: () {
-              ref.read(authControllerProvider.notifier).googleSign(context);
+            onPressed: () async {
+              final status = await ref
+                  .read(authControllerProvider.notifier)
+                  .googleSign(context);
+              if (status == false) {
+                showSnackbar(context, 'Unable to log in');
+              }
             },
             label: const Text(
               'Continue with Google',
@@ -48,6 +54,33 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             ),
             icon: Image.asset(
               'assets/images/google_logo.png',
+              height: 40,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          width: 300,
+          child: ElevatedButton.icon(
+            style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.white)),
+            onPressed: () async {
+              final status = await ref
+                  .read(authControllerProvider.notifier)
+                  .appleSignin(context);
+              if (status == false) {
+                showSnackbar(context, 'Unable to log in');
+              }
+            },
+            label: const Text('Continue with Apple',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                )),
+            icon: Image.asset(
+              'assets/images/apple_logo.png',
               height: 40,
             ),
           ),
