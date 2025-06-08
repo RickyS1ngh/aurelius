@@ -47,7 +47,8 @@ class AuthRepository {
             username: userCredential.user?.displayName ?? '',
             uid: userCredential.user!.uid,
             email: userCredential.user?.email ?? '',
-            tasks: []);
+            tasks: [],
+            reflections: []);
 
         await _firestore
             .collection(Constants.userCollection)
@@ -61,7 +62,8 @@ class AuthRepository {
       return right(userBox.get(Constants.boxKey));
     } on FirebaseAuthException catch (error) {
       throw error.message!;
-    } catch (error) {
+    } catch (error, stack) {
+      print(stack);
       return left(Failure(error.toString()));
     }
   }
@@ -69,9 +71,17 @@ class AuthRepository {
   EitherUser<UserModel> appleSignIn() async {
     try {
       final userBox = Hive.box(Constants.userBox);
-      final appleProvider = AppleAuthProvider();
+      final appleCredenital = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName
+        ],
+      );
+      final oAuthCredential = OAuthProvider('apple.com').credential(
+          idToken: appleCredenital.identityToken,
+          accessToken: appleCredenital.authorizationCode);
 
-      final userCredential = await _auth.signInWithProvider(appleProvider);
+      final userCredential = await _auth.signInWithCredential(oAuthCredential);
 
       UserModel user;
 
@@ -80,7 +90,8 @@ class AuthRepository {
             username: userCredential.user?.displayName ?? '',
             uid: userCredential.user!.uid,
             email: userCredential.user?.email ?? '',
-            tasks: []);
+            tasks: [],
+            reflections: []);
 
         await _firestore
             .collection(Constants.userCollection)

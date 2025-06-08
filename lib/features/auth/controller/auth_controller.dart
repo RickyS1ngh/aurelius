@@ -15,7 +15,7 @@ class AuthController extends StateNotifier<UserModel> {
       : _authRepository = authRepository,
         _ref = ref,
         super(
-          UserModel(username: '', email: '', tasks: []),
+          UserModel(username: '', email: '', tasks: [], reflections: []),
         );
 
   final AuthRepository _authRepository;

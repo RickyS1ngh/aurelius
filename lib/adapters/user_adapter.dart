@@ -1,3 +1,4 @@
+import 'package:aurelius/models/reflection.dart';
 import 'package:aurelius/models/task.dart';
 import 'package:aurelius/models/user.dart';
 import 'package:hive_ce/hive.dart';
@@ -11,8 +12,17 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
     final username = reader.read() as String;
     final uid = reader.read() as String;
     final email = reader.read() as String;
-    final tasks = (reader.read() as List).cast<TaskModel>();
-    return UserModel(username: username, uid: uid, email: email, tasks: tasks);
+    final rawTasks = reader.read() as List<dynamic>?;
+    final tasks = (rawTasks ?? []).whereType<TaskModel>().toList();
+    final rawRefl = reader.read() as List<dynamic>?;
+    final reflections = (rawRefl ?? []).whereType<ReflectionModel>().toList();
+
+    return UserModel(
+        username: username,
+        uid: uid,
+        email: email,
+        tasks: tasks,
+        reflections: reflections);
   }
 
   @override
@@ -21,5 +31,6 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
     writer.write(obj.uid);
     writer.write(obj.email);
     writer.write(obj.tasks);
+    writer.write(obj.reflections);
   }
 }

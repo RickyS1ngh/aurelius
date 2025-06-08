@@ -1,12 +1,14 @@
 import 'package:aurelius/adapters/category_adapter.dart';
+import 'package:aurelius/adapters/reflection_adapter.dart';
 import 'package:aurelius/adapters/task_adapter.dart';
-import 'package:aurelius/adapters/time_of_day_adapter.dart';
+
 import 'package:aurelius/adapters/user_adapter.dart';
 import 'package:aurelius/core/constants/constants.dart';
 import 'package:aurelius/core/providers/firebase_providers.dart';
 import 'package:aurelius/features/auth/controller/auth_controller.dart';
 import 'package:aurelius/features/auth/screens/auth_screen.dart';
 import 'package:aurelius/features/splash/screens/splash_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,12 +20,17 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  try {
+    await dotenv.load(fileName: '.env');
+  } on Exception catch (e) {
+    throw Exception('Error loading .env file: $e');
+  }
   await Hive.initFlutter();
 
+  Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(ReflectionAdapter());
   Hive.registerAdapter(TaskModelAdapter());
   Hive.registerAdapter(UserModelAdapter());
-  Hive.registerAdapter(CategoryAdapter());
-
   await Hive.openBox(Constants.userBox);
 
   runApp(
@@ -52,6 +59,7 @@ class MyApp extends ConsumerWidget {
                   });
                 }
               }
+
               return const SplashScreen();
             }
             return const AuthScreen();

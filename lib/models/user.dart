@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:aurelius/models/task.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:aurelius/models/reflection.dart';
+import 'package:aurelius/models/task.dart';
 
 @HiveType(typeId: 1)
 class UserModel {
@@ -16,24 +18,29 @@ class UserModel {
   final String email;
   @HiveField(3)
   List<TaskModel> tasks;
+  @HiveField(4)
+  List<ReflectionModel> reflections;
   UserModel({
-    required this.username,
     String? uid,
+    required this.username,
     required this.email,
     required this.tasks,
+    required this.reflections,
   }) : uid = uid ?? const Uuid().v4();
 
   UserModel copyWith({
     String? username,
-    String? uuid,
+    String? uid,
     String? email,
     List<TaskModel>? tasks,
+    List<ReflectionModel>? reflections,
   }) {
     return UserModel(
       username: username ?? this.username,
-      uid: uuid ?? this.uid,
+      uid: uid ?? this.uid,
       email: email ?? this.email,
       tasks: tasks ?? this.tasks,
+      reflections: reflections ?? this.reflections,
     );
   }
 
@@ -43,6 +50,7 @@ class UserModel {
       'uid': uid,
       'email': email,
       'tasks': tasks.map((x) => x.toMap()).toList(),
+      'reflections': reflections.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -58,6 +66,13 @@ class UserModel {
               ),
             )
           : [],
+      reflections: map['reflections'] != null
+          ? List<ReflectionModel>.from(
+              (map['reflections'] as List).map<ReflectionModel>(
+                (x) => ReflectionModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : [],
     );
   }
 
@@ -68,7 +83,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(username: $username, uid: $uid, email: $email, tasks: $tasks)';
+    return 'UserModel(username: $username, uid: $uid, email: $email, tasks: $tasks, reflections: $reflections)';
   }
 
   @override
@@ -78,11 +93,16 @@ class UserModel {
     return other.username == username &&
         other.uid == uid &&
         other.email == email &&
-        listEquals(other.tasks, tasks);
+        listEquals(other.tasks, tasks) &&
+        listEquals(other.reflections, reflections);
   }
 
   @override
   int get hashCode {
-    return username.hashCode ^ uid.hashCode ^ email.hashCode ^ tasks.hashCode;
+    return username.hashCode ^
+        uid.hashCode ^
+        email.hashCode ^
+        tasks.hashCode ^
+        reflections.hashCode;
   }
 }

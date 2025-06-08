@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DataSelector extends StatefulWidget {
-  const DataSelector({super.key});
+class DateSelector extends StatefulWidget {
+  DateSelector(this.selectedDate, this.setDate, {super.key});
+  DateTime selectedDate;
+  final void Function(DateTime date) setDate;
 
   @override
-  State<DataSelector> createState() => _DataSelectorWidgetState();
+  State<DateSelector> createState() => _DateSelectorWidgetState();
 }
 
-class _DataSelectorWidgetState extends State<DataSelector> {
+class _DateSelectorWidgetState extends State<DateSelector> {
   List<DateTime> getWeekDates(int weekOffset) {
     final today = DateTime.now();
     DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
@@ -18,7 +20,6 @@ class _DataSelectorWidgetState extends State<DataSelector> {
   }
 
   int weekOffset = 0;
-  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +68,16 @@ class _DataSelectorWidgetState extends State<DataSelector> {
                 itemCount: weekdays.length,
                 itemBuilder: (context, index) {
                   final date = weekdays[index];
-                  bool isSelected = DateFormat('d').format(selectedDate) ==
-                          DateFormat('d').format(date) &&
-                      selectedDate.month == date.month &&
-                      selectedDate.year == date.year;
+                  bool isSelected =
+                      DateFormat('d').format(widget.selectedDate) ==
+                              DateFormat('d').format(date) &&
+                          widget.selectedDate.month == date.month &&
+                          widget.selectedDate.year == date.year;
                   return GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedDate = weekdays[index];
+                          widget.selectedDate = weekdays[index];
+                          widget.setDate(weekdays[index]);
                         });
                       },
                       child: Container(

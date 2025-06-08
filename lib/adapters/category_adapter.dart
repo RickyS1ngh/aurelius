@@ -3,7 +3,7 @@ import 'package:hive_ce/hive.dart';
 
 class CategoryAdapter extends TypeAdapter<Category> {
   @override
-  final typeId = 3;
+  final int typeId = 3;
 
   @override
   Category read(BinaryReader reader) {
