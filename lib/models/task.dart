@@ -22,6 +22,8 @@ class TaskModel {
   @HiveField(5)
   final DateTime createdAt;
   @HiveField(6)
+  final bool isCompleted;
+  @HiveField(7)
   final String uuid;
   TaskModel(
       {required this.title,
@@ -30,8 +32,10 @@ class TaskModel {
       required this.dueDate,
       required this.dueTime,
       DateTime? createdAt,
+      bool? isCompleted,
       String? uuid})
-      : uuid = uuid ?? const Uuid().v4(),
+      : isCompleted = isCompleted ?? false,
+        uuid = uuid ?? const Uuid().v4(),
         createdAt = createdAt ?? DateTime.now();
 
   TaskModel copyWith({
@@ -41,6 +45,7 @@ class TaskModel {
     DateTime? dueDate,
     TimeOfDay? dueTime,
     DateTime? createdAt,
+    bool? isCompleted,
     String? uuid,
   }) {
     return TaskModel(
@@ -50,6 +55,7 @@ class TaskModel {
       dueDate: dueDate ?? this.dueDate,
       dueTime: dueTime ?? this.dueTime,
       createdAt: createdAt ?? this.createdAt,
+      isCompleted: isCompleted ?? this.isCompleted,
       uuid: uuid ?? this.uuid,
     );
   }
@@ -62,6 +68,7 @@ class TaskModel {
       'dueDate': dueDate.millisecondsSinceEpoch,
       'dueTime': {'hour': dueTime.hour, 'minute': dueTime.minute},
       'createdAt': createdAt.millisecondsSinceEpoch,
+      'isCompleted': isCompleted,
       'uuid': uuid,
     };
   }
@@ -76,6 +83,7 @@ class TaskModel {
           hour: (map['dueTime']['hour'] as num).toInt(),
           minute: (map['dueTime']['minute'] as num).toInt()),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      isCompleted: map['isCompleted'] as bool,
       uuid: map['uuid'] as String,
     );
   }
@@ -87,7 +95,7 @@ class TaskModel {
 
   @override
   String toString() {
-    return 'Task(title: $title, description: $description, category: $category, dueDate: $dueDate, dueTime: $dueTime, createdAt: $createdAt, uuid: $uuid)';
+    return 'Task(title: $title, description: $description, category: $category, dueDate: $dueDate, dueTime: $dueTime, createdAt: $createdAt, isCompleted: $isCompleted, uuid: $uuid)';
   }
 
   @override
@@ -100,6 +108,7 @@ class TaskModel {
         other.dueDate == dueDate &&
         other.dueTime == dueTime &&
         other.createdAt == createdAt &&
+        other.isCompleted == isCompleted &&
         other.uuid == uuid;
   }
 
@@ -111,6 +120,7 @@ class TaskModel {
         dueDate.hashCode ^
         dueTime.hashCode ^
         createdAt.hashCode ^
+        isCompleted.hashCode ^
         uuid.hashCode;
   }
 }

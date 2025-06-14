@@ -15,13 +15,65 @@ class HomeController extends StateNotifier<UserModel> {
   HomeController(HomeRepository homerepository, Ref ref)
       : _homeRepository = homerepository,
         _ref = ref,
-        super(UserModel(email: '', username: '', tasks: []));
+        super(UserModel(email: '', username: '', tasks: [], reflections: []));
   final HomeRepository _homeRepository;
   final Ref _ref;
 
   Future<bool> addTask(BuildContext context, String uid, TaskModel task) async {
     final user = await _homeRepository.addTask(uid, task);
 
+    return user.fold((l) {
+      showSnackbar(context, l.errorMessage);
+      return false;
+    }, (user) {
+      _ref.read(currentUserProvider.notifier).state = user;
+      return true;
+    });
+  }
+
+  Future<bool> completeTask(
+      BuildContext context, String taskUuid, String userUid) async {
+    final user = await _homeRepository.completeTask(taskUuid, userUid);
+    return user.fold((l) {
+      showSnackbar(context, l.errorMessage);
+      return false;
+    }, (user) {
+      _ref.read(currentUserProvider.notifier).state = user;
+      return true;
+    });
+  }
+
+  Future<bool> removeCompleted(
+      BuildContext context, String taskUuid, String userUid) async {
+    final user = await _homeRepository.removeCompleted(taskUuid, userUid);
+    return user.fold((l) {
+      showSnackbar(context, l.errorMessage);
+      return false;
+    }, (user) {
+      _ref.read(currentUserProvider.notifier).state = user;
+      return true;
+    });
+  }
+
+  Future<bool> updateTask(BuildContext context, String taskUuid, String userUid,
+      TaskModel updatedTask) async {
+    final user =
+        await _homeRepository.updateTask(taskUuid, userUid, updatedTask);
+    return user.fold((l) {
+      showSnackbar(context, l.errorMessage);
+      return false;
+    }, (user) {
+      _ref.read(currentUserProvider.notifier).state = user;
+      return true;
+    });
+  }
+
+  Future<bool> deleteTask(
+      BuildContext context, String taskUuid, String userUid) async {
+    final user = await _homeRepository.deleteTask(
+      taskUuid,
+      userUid,
+    );
     return user.fold((l) {
       showSnackbar(context, l.errorMessage);
       return false;

@@ -20,6 +20,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
     final dueTime = TimeOfDay(hour: dueHour, minute: dueMinute);
 
     final createdAt = DateTime.fromMillisecondsSinceEpoch(reader.readInt());
+    final isCompleted = reader.readBool();
     final uuid = reader.readString();
 
     return TaskModel(
@@ -29,6 +30,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       dueDate: dueDate,
       dueTime: dueTime,
       createdAt: createdAt,
+      isCompleted: isCompleted,
       uuid: uuid,
     );
   }
@@ -46,6 +48,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
     writer.writeInt(obj.dueTime.minute);
 
     writer.writeInt(obj.createdAt.millisecondsSinceEpoch);
+    writer.writeBool(obj.isCompleted);
     writer.writeString(obj.uuid);
   }
 }
