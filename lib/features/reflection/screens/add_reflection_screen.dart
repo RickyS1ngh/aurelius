@@ -55,103 +55,107 @@ class _AddReflectionScreenState extends ConsumerState<AddReflectionScreen> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: TextFormField(
-                onTapOutside: (PointerDownEvent event) {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-                decoration: const InputDecoration(
-                  focusedBorder: OutlineInputBorder(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextFormField(
+                  onTapOutside: (PointerDownEvent event) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  decoration: const InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Color(0xFFa68a64),
+                    )),
+                    enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                    color: Color(0xFFa68a64),
-                  )),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFF9F6F1),
-                    ),
-                  ),
-                  prefixIcon: Icon(Icons.title),
-                  hintText: 'Title',
-                ),
-                maxLength: 20,
-                keyboardType: TextInputType.text,
-                validator: (val) {
-                  if (val == null ||
-                      val.trim().isEmpty ||
-                      val.length < 5 ||
-                      val.length > 20) {
-                    return 'Invalid title ';
-                  }
-                  return null;
-                },
-                onSaved: (val) {
-                  reflectionTitle = val!;
-                },
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .01,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
-                onTapOutside: (PointerDownEvent event) {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-                maxLines: 10,
-                maxLength: 200,
-                decoration: const InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Color(0xFFa68a64),
-                  )),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFF9F6F1),
-                    ),
-                  ),
-                  hintText: 'Reflection',
-                ),
-                keyboardType: TextInputType.text,
-                validator: (val) {
-                  if (val == null || val.trim().isEmpty || val.length > 200) {
-                    return 'Invalid reflection';
-                  }
-                  return null;
-                },
-                onSaved: (val) {
-                  reflectionText = val!;
-                },
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .02,
-            ),
-            SizedBox(
-              width: 400,
-              child: ElevatedButton(
-                style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Color(0xFFa68a64))),
-                onPressed: () {
-                  submit();
-                },
-                child: isAdding
-                    ? const CircularProgressIndicator()
-                    : const Text(
-                        'Submit',
-                        style: TextStyle(
-                          color: Color(0xFFF9F6F1),
-                          fontFamily: 'Cinzel',
-                          fontSize: 20,
-                        ),
+                        color: Color(0xFFF9F6F1),
                       ),
+                    ),
+                    prefixIcon: Icon(Icons.title),
+                    hintText: 'Title',
+                  ),
+                  maxLength: 20,
+                  keyboardType: TextInputType.text,
+                  validator: (val) {
+                    if (val == null ||
+                        val.trim().isEmpty ||
+                        val.length < 5 ||
+                        val.length > 20) {
+                      return 'Invalid title ';
+                    }
+                    return null;
+                  },
+                  onSaved: (val) {
+                    reflectionTitle = val!;
+                  },
+                ),
               ),
-            )
-          ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .01,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextFormField(
+                  onTapOutside: (PointerDownEvent event) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  maxLines: 10,
+                  maxLength: 200,
+                  decoration: const InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Color(0xFFa68a64),
+                    )),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFF9F6F1),
+                      ),
+                    ),
+                    hintText: 'Reflection',
+                  ),
+                  keyboardType: TextInputType.text,
+                  validator: (val) {
+                    if (val == null || val.trim().isEmpty || val.length > 200) {
+                      return 'Invalid reflection';
+                    }
+                    return null;
+                  },
+                  onSaved: (val) {
+                    reflectionText = val!;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .02,
+              ),
+              SizedBox(
+                width: 400,
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                      backgroundColor:
+                          WidgetStatePropertyAll(Color(0xFFa68a64))),
+                  onPressed: () {
+                    submit();
+                  },
+                  child: isAdding
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          'Submit',
+                          style: TextStyle(
+                            color: Color(0xFFF9F6F1),
+                            fontFamily: 'Cinzel',
+                            fontSize: 20,
+                          ),
+                        ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:aurelius/features/auth/controller/auth_controller.dart';
+import 'package:aurelius/features/home/screens/task_detail_screen.dart';
 import 'package:aurelius/features/home/widgets/date_selector.dart';
 import 'package:aurelius/features/reflection/screens/add_reflection_screen.dart';
+import 'package:aurelius/features/reflection/screens/reflection_detail_screen.dart';
 import 'package:aurelius/models/reflection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,8 +31,22 @@ class _ReflectionScreenState extends ConsumerState<ReflectionScreen> {
           return ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: SizedBox(
-              height: MediaQuery.of(ctx).size.height * .7,
-              child: const AddReflectionScreen(),
+                height: MediaQuery.of(ctx).size.height * .7,
+                child: const AddReflectionScreen()),
+          );
+        });
+  }
+
+  void viewReflection(reflection) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * .7,
+              child: ReflectionDetailScreen(reflection),
             ),
           );
         });
@@ -82,46 +98,52 @@ class _ReflectionScreenState extends ConsumerState<ReflectionScreen> {
                         } else {
                           height = 150;
                         }
-                        return Container(
-                            margin: const EdgeInsets.all(5),
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 20, right: 20),
-                            height: height,
-                            width: 350,
-                            decoration: BoxDecoration(
-                                color: const Color(0xffe3e0cd),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Center(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: userReflections[index].title,
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Cinzel',
-                                          fontSize: 15,
-                                          decoration: TextDecoration.underline,
-                                          height: 2),
+                        return GestureDetector(
+                          onTap: () {
+                            viewReflection(userReflections[index]);
+                          },
+                          child: Container(
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 20, right: 20),
+                              height: height,
+                              width: 350,
+                              decoration: BoxDecoration(
+                                  color: const Color(0xffe3e0cd),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: userReflections[index].title,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Cinzel',
+                                            fontSize: 15,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            height: 2),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(
-                                  userReflections[index].text,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Cinzel',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
+                                  SizedBox(
+                                    height: 3,
                                   ),
-                                ),
-                              ],
-                            ));
+                                  Text(
+                                    userReflections[index].text,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Cinzel',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        );
                       },
                       separatorBuilder: (context, index) {
                         return SizedBox(height: 10);
