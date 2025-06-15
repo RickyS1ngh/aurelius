@@ -38,7 +38,7 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
             style: const TextStyle(
                 fontFamily: 'Cinzel',
                 color: Colors.white,
-                fontSize: 15,
+                fontSize: 12,
                 fontWeight: FontWeight.bold),
           )),
     );
