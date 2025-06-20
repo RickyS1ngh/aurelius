@@ -19,10 +19,8 @@ width="200"/>
 width="200"/>
 </p>
 ## Demo
-
-<video width="320" height="240" controls>
-  <source src="https://github.com/user-attachments/assets/c1d73c70-6ae2-4c4c-b893-43daaf1771da.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<p align="center">
+  <a href="https://github.com/user-attachments/assets/c1d73c70-6ae2-4c4c-b893-43daaf1771da.mp4">Click here to watch the demo</a>
+</p>
 
 
