@@ -1,6 +1,6 @@
 # aurelius
 
-Aurelius is a Stoic productivity and self-reflection Flutter application inspired by the teachings of Marcus Aurelius, with task mangament, journaling, and an AI mentor.
+Aurelius is a Stoic productivity and self-reflection Flutter application inspired by the teachings of Marcus Aurelius, with task management, journaling, and an AI mentor.
 ## Screenshots
 
 <p align="center">
@@ -18,3 +18,9 @@ width="200"/>
   <img src="https://github.com/user-attachments/assets/da0c4f7b-b8f9-49ce-9ac5-a4ad87a7daaf"
 width="200"/>
 </p>
+## Demo
+<video width="320" height="240" controls>
+  <source src=https://github.com/user-attachments/assets/c1d73c70-6ae2-4c4c-b893-43daaf1771da">
+Your browser does not support the video tag.
+</video>
+
