@@ -20,10 +20,9 @@ width="200"/>
 </p>
 
 ## Demo
-
 <p align="center">
-  <a href="https://github.com/RickyS1ngh/aurelius/releases/download/v1/recording.mp4">
-    <img src="https://img.icons8.com/fluency/344/play-button-circled.png" width="80" alt="Watch Demo"/>
+  <a href="https://github.com/user-attachments/assets/5614ccb7-0c87-4062-a75c-7f72d07533fe">
+    <strong>Click here to watch the demo</strong>
   </a>
 </p>
 
